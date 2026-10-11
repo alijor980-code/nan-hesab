@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f2e8">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>حساب نان</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f7f3eb;
+  --surface:#fffdf8;
+  --surface-2:#f1e8d8;
+  --ink:#34281f;
+  --muted:#85776a;
+  --line:#e8ddcc;
+  --crust:#69462e;
+  --crust-2:#845b39;
+  --gold:#dba451;
+  --gold-soft:#f8e8c9;
+  --sage:#65765c;
+  --sage-soft:#e8eee3;
+  --danger:#a64d3f;
+  --danger-soft:#f8e8e3;
+  --shadow:0 12px 32px rgba(77,54,31,.055);
+  font-synthesis:none;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;line-height:1.65;-webkit-tap-highlight-color:transparent}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;transition:transform .15s ease,background .15s ease,border-color .15s ease}
+button:active{transform:scale(.985)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #e4b45f;outline-offset:3px}
+button:disabled{cursor:not-allowed;opacity:.45;transform:none}
+main{width:min(100% - 28px,680px);margin:0 auto;padding:22px 0 calc(44px + env(safe-area-inset-bottom,0px))}
+.hero{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:184px;padding:24px 26px;border-radius:28px;background:linear-gradient(118deg,#493327 0%,#65462f 58%,#795337 100%);color:#fff9ed;box-shadow:0 16px 34px rgba(81,54,33,.13)}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;z-index:-1;pointer-events:none}
+.hero:before{width:210px;height:210px;background:rgba(235,184,105,.08);top:-112px;left:36%}
+.hero:after{width:130px;height:130px;border:1px solid rgba(255,244,222,.10);bottom:-80px;left:10%}
+.hero-copy{position:relative;z-index:1;max-width:68%}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;margin:0 0 10px;padding:5px 10px;border:1px solid rgba(255,247,229,.2);border-radius:999px;color:#f4d7a3;font-size:11px;font-weight:600;letter-spacing:.1px}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.hero h1{font-size:clamp(25px,5vw,34px);font-weight:800;line-height:1.3;margin:0 0 6px;letter-spacing:-.6px}
+.hero p{font-size:13px;color:rgba(255,249,237,.74);margin:0;max-width:300px}
+.hero-art{flex:0 0 auto;width:clamp(112px,27vw,164px);margin-inline-end:-6px;filter:drop-shadow(0 9px 9px rgba(26,17,10,.16))}
+.summary{position:relative;margin:-20px 14px 20px;padding:21px 22px 16px;border:1px solid rgba(232,221,204,.9);border-radius:22px;background:var(--surface);box-shadow:var(--shadow)}
+.summary-label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;font-weight:600}
+.summary-label svg{width:17px;height:17px;color:var(--crust-2)}
+.total-line{display:flex;align-items:baseline;gap:9px;margin-top:3px;direction:rtl}
+.total-line strong{font-size:clamp(32px,7vw,42px);font-weight:800;letter-spacing:-1.2px;line-height:1.35;font-variant-numeric:tabular-nums}
+.total-line span{font-size:13px;color:var(--muted)}
+.stats{display:flex;gap:0;margin-top:15px;padding-top:13px;border-top:1px solid var(--line)}
+.stat{flex:1;display:flex;align-items:center;gap:9px;min-width:0}
+.stat+.stat{border-right:1px solid var(--line);padding-right:15px;margin-right:15px}
+.stat-icon{display:grid;place-items:center;flex:0 0 32px;width:32px;height:32px;border-radius:11px;background:var(--surface-2);color:var(--crust-2)}
+.stat-icon svg{width:17px;height:17px}
+.stat-value{font-size:15px;font-weight:800;line-height:1.35;font-variant-numeric:tabular-nums}
+.stat-label{font-size:11px;color:var(--muted)}
+.panel{padding:19px;margin:16px 0;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:0 5px 18px rgba(77,54,31,.025)}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.section-title{display:flex;align-items:center;gap:10px;min-width:0}
+.section-icon{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;background:var(--gold-soft);color:var(--crust);border-radius:13px}
+.section-icon svg{width:20px;height:20px}
+h2{font-size:15px;line-height:1.4;font-weight:800;margin:0}
+.section-note{font-size:12px;color:var(--muted);margin-top:3px}
+.date-pill{flex:0 0 auto;padding:6px 9px;background:#f5eee2;border-radius:9px;color:var(--crust-2);font-size:11px;white-space:nowrap}
+.field-label{display:block;margin:0 0 7px;font-size:12px;color:var(--muted);font-weight:600}
+input[type=text],input[type=tel],textarea{width:100%;min-width:0;padding:12px 13px;border:1.5px solid var(--line);border-radius:13px;background:#fffefa;font-size:15px;outline:none;transition:border-color .15s,box-shadow .15s}
+input[type=text]:focus,input[type=tel]:focus,textarea:focus{border-color:#c69a5d;box-shadow:0 0 0 3px rgba(219,164,81,.13)}
+input::placeholder,textarea::placeholder{color:#b1a597}
+.amount-wrap{position:relative;margin-bottom:13px}
+.amount-wrap input{padding-left:65px;font-weight:700;font-variant-numeric:tabular-nums}
+.amount-unit{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--muted);pointer-events:none}
+.select-label{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:2px 0 9px;font-size:12px;color:var(--muted);font-weight:600}
+.select-label span:last-child{font-weight:400;font-size:11px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px}
+.chip{padding:8px 13px;border:1px solid var(--line);border-radius:999px;background:transparent;color:#796a5c;font-size:13px;font-weight:600;max-width:100%}
+.chip[aria-pressed=true]{background:var(--sage-soft);border-color:#c9d5be;color:#43573a}
+.chip[aria-pressed=true]:before{content:"✓";display:inline-block;margin-left:5px;font-size:11px}
+.chip:disabled{opacity:.45}
+.no-people-note{padding:13px;border-radius:13px;background:#f8f2e8;color:var(--muted);font-size:12px;margin-bottom:14px}
+.actions-row{display:flex;align-items:center;gap:9px}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:7px;min-height:42px;padding:10px 14px;border-radius:12px;font-size:13px;font-weight:700;white-space:nowrap}
+.btn svg{width:16px;height:16px;flex:0 0 auto}
+.btn-primary{background:var(--crust);color:#fff9ed;box-shadow:0 4px 10px rgba(105,70,46,.12)}
+.btn-primary:hover{background:#573923}
+.btn-soft{background:var(--sage-soft);color:#4e6245}
+.btn-quiet{background:transparent;color:var(--muted)}
+.btn-danger{background:var(--danger-soft);color:var(--danger)}
+#addDay{flex:1}
+.list-section{margin:24px 0}
+.list-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 2px 12px}
+.list-heading h2{font-size:17px}
+.list-heading p{margin:4px 0 0;font-size:12px;color:var(--muted)}
+.count-pill{padding:4px 9px;border-radius:999px;background:#eee4d4;color:var(--crust-2);font-size:11px;font-weight:700;white-space:nowrap}
+.person{margin:10px 0;background:var(--surface);border:1px solid var(--line);border-radius:19px;overflow:hidden;box-shadow:0 5px 18px rgba(77,54,31,.025)}
+.p-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 16px 12px}
+.person-identity{display:flex;align-items:center;gap:11px;min-width:0}
+.avatar{display:grid;place-items:center;width:43px;height:43px;flex:0 0 43px;border-radius:15px;background:var(--surface-2);color:var(--crust-2);font-size:17px;font-weight:800}
+.p-name{font-size:15px;font-weight:800;overflow-wrap:anywhere}
+.p-sub{color:var(--muted);font-size:11px;margin-top:3px}
+.balance-wrap{text-align:left;flex:0 0 auto;max-width:48%}
+.p-bal{font-size:20px;font-weight:800;line-height:1.3;letter-spacing:-.4px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.p-bal.zero{color:var(--sage)}
+.balance-unit{font-size:11px;font-weight:500;color:var(--muted);margin-right:3px;letter-spacing:0}
+.debt-status{display:inline-block;margin-top:4px;padding:2px 7px;background:var(--gold-soft);color:#8a6029;border-radius:7px;font-size:10px;font-weight:700}
+.debt-status.is-zero{background:var(--sage-soft);color:#536849}
+.p-actions{display:flex;gap:7px;padding:0 16px 14px;flex-wrap:wrap}
+.p-actions .btn{flex:1;min-width:88px;min-height:37px;padding:8px 10px;font-size:12px}
+.hist{border-top:1px dashed var(--line);padding:8px 16px 14px;background:rgba(246,240,229,.4)}
+.hist-title{font-size:11px;font-weight:800;color:var(--muted);margin:3px 0 5px}
+.hist-item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;font-size:12px;border-bottom:1px solid var(--line)}
+.hist-item:last-of-type{border-bottom:0}
+.hist-item .d{color:var(--muted);min-width:0}
+.hist-amount{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.hist-item .remove-entry{background:transparent;color:var(--danger);font-size:11px;padding:4px 5px;min-height:28px}
+.custom-entry{display:flex;gap:8px;margin-top:11px}
+.custom-entry input{flex:1;min-width:0;font-size:13px;padding:9px 10px}
+.custom-entry .btn{min-height:39px}
+.settled{color:var(--muted);font-size:11px;padding-top:11px;line-height:1.9}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 18px;color:var(--muted);border:1px dashed #dcccB6;border-radius:18px;background:rgba(255,253,248,.55)}
+.empty svg{width:34px;height:34px;color:#b99a70;margin-bottom:8px}
+.empty strong{font-size:13px;color:var(--ink);margin-bottom:3px}
+.empty span{font-size:12px}
+.add-person .row{display:flex;gap:9px}
+.add-person input{flex:1}
+.add-person .btn{flex:0 0 auto}
+details summary{display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;color:var(--ink);font-size:13px;font-weight:800;padding:2px 0}
+details summary::-webkit-details-marker{display:none}
+details summary:after{content:"＋";display:grid;place-items:center;width:27px;height:27px;border-radius:9px;background:var(--surface-2);color:var(--crust-2);font-size:17px}
+details[open] summary:after{content:"−"}
+.backup-content{padding-top:12px}
+.backup-content p{font-size:12px;color:var(--muted);margin:0 0 10px}
+.backup-buttons{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.backup-buttons .btn{flex:1}
+textarea{min-height:100px;resize:vertical;font-size:12px;direction:ltr;text-align:left}
+.backup-content .btn-full{width:100%;margin-top:8px}
+.footer-note{text-align:center;color:#a19383;font-size:11px;padding:5px 0 0}
+.toast{position:fixed;z-index:20;inset-inline:0;bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;pointer-events:none;padding:0 14px}
+.toast div{max-width:100%;background:#382a20;color:#fff8e9;padding:11px 17px;border-radius:13px;font-size:13px;box-shadow:0 8px 30px rgba(40,27,18,.2);opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;text-align:center}
+.toast div.on{opacity:1;transform:none}
+.modal{position:fixed;z-index:30;inset:0;background:rgba(40,29,21,.48);display:none;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(3px)}
+.modal.on{display:flex}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:23px;padding:22px;width:100%;max-width:410px;box-shadow:0 20px 60px rgba(40,27,18,.22)}
+.sheet-mark{display:grid;place-items:center;width:42px;height:42px;background:var(--gold-soft);border-radius:14px;color:var(--crust);margin-bottom:12px}
+.sheet-mark svg{width:21px;height:21px}
+.sheet p{margin:0 0 20px;font-size:14px;line-height:1.9}
+.sheet .row{display:flex;gap:9px}
+.sheet .row button{flex:1}
+@media(max-width:480px){
+ main{width:min(100% - 20px,680px);padding-top:10px}
+ .hero{min-height:160px;padding:19px 17px;border-radius:23px}
+ .hero-copy{max-width:69%}
+ .hero p{font-size:12px}
+ .hero-art{width:clamp(100px,29vw,128px);margin-inline-end:-8px}
+ .summary{margin:-17px 8px 16px;padding:18px 16px 14px;border-radius:19px}
+ .total-line strong{font-size:34px}
+ .stat+.stat{padding-right:10px;margin-right:10px}
+ .stat-icon{width:29px;height:29px;flex-basis:29px;border-radius:10px}
+ .stat-value{font-size:14px}
+ .panel{padding:15px;border-radius:19px}
+ .section-head{align-items:flex-start}
+ .date-pill{font-size:10px;padding:5px 7px}
+ .btn{font-size:12px;padding-inline:11px}
+ .p-head{padding:14px 13px 11px}
+ .person-identity{gap:9px}
+ .avatar{width:39px;height:39px;flex-basis:39px;border-radius:13px}
+ .p-bal{font-size:18px}
+ .p-actions{padding:0 13px 13px;gap:6px}
+ .p-actions .btn{min-width:0;padding-inline:7px;font-size:11px}
+ .hist{padding-inline:13px}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="eyebrow-dot"></span>دفتر حساب روزانه</div>
+      <h1>حساب نان</h1>
+      <p>حساب نانِ همکارها، ساده و مرتب؛ هر روز یک ثبت کوچک.</p>
+    </div>
+    <svg class="hero-art" viewBox="0 0 180 170" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="91" cy="137" rx="61" ry="12" fill="#20160f" opacity=".22"/>
+      <path d="M28 91C28 61 52 38 84 35c31-3 61 16 68 45 6 26-12 48-35 55-28 9-64 0-80-17-7-7-10-16-9-27Z" fill="#d79b4b"/>
+      <path d="M34 85C41 59 63 45 86 44c24-1 47 13 56 35 7 19-6 37-26 45-23 8-54 3-70-11-9-8-15-17-12-28Z" fill="#efc879"/>
+      <path d="M57 55c-7 11-8 23-4 32M83 47c-7 11-8 23-4 32M111 54c-7 10-8 19-4 28" fill="none" stroke="#a86c35" stroke-width="7" stroke-linecap="round"/>
+      <path d="M57 56c-5 8-6 17-3 24M83 48c-5 8-6 17-3 24M111 55c-5 7-6 14-3 21" fill="none" stroke="#f8dda0" stroke-width="2.2" stroke-linecap="round" opacity=".9"/>
+      <path d="M131 27c-2 13-9 22-20 28M126 39c-10-1-16-6-19-15M119 48c-9-1-14-5-17-12" fill="none" stroke="#c3c99d" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M35 111c-8 1-13 5-16 12M145 103c8 2 13 7 15 13" fill="none" stroke="#f6d9a1" stroke-width="2" stroke-linecap="round" opacity=".75"/>
+      <circle cx="36" cy="42" r="3" fill="#f2ce8a" opacity=".75"/><circle cx="149" cy="59" r="2" fill="#f2ce8a" opacity=".75"/><circle cx="56" cy="22" r="2" fill="#f2ce8a" opacity=".65"/>
+    </svg>
+  </header>
+
+  <section class="summary" aria-live="polite" aria-label="خلاصه حساب‌ها">
+    <div class="summary-label">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M7 15h3"/><path d="M7 3h10"/></svg>
+      مجموع بدهی همکارها
+    </div>
+    <div class="total-line"><strong id="grand">۰</strong><span>تومان</span></div>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.8 20v-1.5A5.2 5.2 0 0 1 8 13.3h2A5.2 5.2 0 0 1 15.2 18v2M16 4.9a3.5 3.5 0 0 1 0 6.3M17 14a4.5 4.5 0 0 1 4.2 4.5V20"/></svg></span>
+        <div><div class="stat-value" id="peopleCount">۰</div><div class="stat-label">همکار ثبت‌شده</div></div>
+      </div>
+      <div class="stat">
+        <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M16 3v4M8 3v4M3 10h18M8 14h3M8 17h7"/></svg></span>
+        <div><div class="stat-value" id="todayCount">۰</div><div class="stat-label">ثبت امروز</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="entryTitle">
+    <div class="section-head">
+      <div class="section-title">
+        <span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5C4 5.9 7.1 3 11.8 3S20 5.9 20 9.5v8a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3Z"/><path d="m8 7 1.3 2M12 5.8l1.3 2M15.5 8l1 1.5"/></svg></span>
+        <div><h2 id="entryTitle">ثبت نان امروز</h2><div class="section-note">مبلغ هر نفر را وارد و همکارها را انتخاب کنید.</div></div>
+      </div>
+      <span class="date-pill" id="today">امروز</span>
+    </div>
+    <label class="field-label" for="amount">هزینه نان برای هر نفر</label>
+    <div class="amount-wrap"><input id="amount" type="tel" inputmode="numeric" placeholder="مثلاً ۴۵٬۰۰۰" autocomplete="off" aria-label="مبلغ نان امروز به تومان"><span class="amount-unit">تومان</span></div>
+    <div class="select-label"><span>برای چه کسانی ثبت شود؟</span><span id="selectedCount">۰ نفر انتخاب شده</span></div>
+    <div class="chips" id="chips"></div>
+    <div class="no-people-note" id="noPeopleNote" hidden>برای شروع، نام همکارها را در بخش «افزودن همکار» ثبت کنید.</div>
+    <div class="actions-row">
+      <button class="btn btn-quiet" id="selAll" type="button">انتخاب همه</button>
+      <button class="btn btn-primary" id="addDay" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>ثبت هزینه</button>
+    </div>
+  </section>
+
+  <section class="list-section" aria-labelledby="listTitle">
+    <div class="list-heading">
+      <div><h2 id="listTitle">حساب همکارها</h2><p>بدهی‌ها، ریز هزینه‌ها و تسویه‌ها</p></div>
+      <span class="count-pill" id="listCount">۰ نفر</span>
+    </div>
+    <section id="list"></section>
+  </section>
+
+  <section class="panel add-person" aria-labelledby="addPersonTitle">
+    <div class="section-head">
+      <div class="section-title">
+        <span class="section-icon" style="background:var(--sage-soft);color:var(--sage)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.8 20v-1.5A5.2 5.2 0 0 1 8 13.3h2a5.2 5.2 0 0 1 5.2 5.2V20M19 8v6M16 11h6"/></svg></span>
+        <div><h2 id="addPersonTitle">افزودن همکار</h2><div class="section-note">نام جدید را به فهرست اضافه کنید.</div></div>
+      </div>
+    </div>
+    <div class="row"><input id="newName" type="text" placeholder="نام همکار" autocomplete="off" aria-label="نام همکار جدید"><button class="btn btn-primary" id="addPerson" type="button">افزودن</button></div>
+  </section>
+
+  <section class="panel">
+    <details>
+      <summary>پشتیبان‌گیری و بازیابی اطلاعات</summary>
+      <div class="backup-content">
+        <p id="stat"></p>
+        <p>اطلاعات روی همین مرورگر ذخیره می‌شود. برای جلوگیری از دست رفتن حساب‌ها، گاهی فایل پشتیبان بگیرید.</p>
+        <div class="backup-buttons"><button class="btn btn-soft" id="exp" type="button">ذخیره فایل پشتیبان</button><button class="btn btn-soft" id="imp" type="button">بازیابی از فایل</button></div>
+        <input type="file" id="file" accept=".json,.txt,application/json,text/plain" style="display:none">
+        <textarea id="box" placeholder="متن پشتیبان اینجا نمایش داده می‌شود. برای بازیابی از متن، محتوای پشتیبان را در این کادر قرار دهید."></textarea>
+        <button class="btn btn-quiet btn-full" id="impTxt" type="button">بازیابی از متن</button>
+      </div>
+    </details>
+  </section>
+  <div class="footer-note">حساب نان · ساده، روزانه، همیشه در دسترس</div>
+</main>
+
+<div class="toast" role="status" aria-live="polite"><div id="toast"></div></div>
+<div class="modal" id="modal"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mText">
+  <span class="sheet-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 21 19H3L12 3Z"/><path d="M12 9v4M12 16.5h.01"/></svg></span>
+  <p id="mText"></p>
+  <div class="row"><button class="btn btn-quiet" id="mNo" type="button">انصراف</button><button class="btn btn-primary" id="mYes" type="button">تأیید</button></div>
+</div></div>
+
+<script>
+(function(){
+  'use strict';
+  var KEY='nan-hesab-v1';
+  var state={people:[],last:0};
+  var selected={};
+  var open={};
+  var fa='۰۱۲۳۴۵۶۷۸۹';
+  var $=function(id){return document.getElementById(id);};
+  var toastT;
+
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+  function load(){
+    try{
+      var raw=localStorage.getItem(KEY);
+      if(raw){var parsed=JSON.parse(raw);if(parsed&&Array.isArray(parsed.people))state=normalizeState(parsed);}
+    }catch(e){state={people:[],last:0};}
+  }
+  function normalizeState(s){
+    return {
+      last:Math.max(0,Number(s.last)||0),
+      people:s.people.filter(function(p){return p&&typeof p==='object'&&String(p.name||'').trim();}).map(function(p){
+        return {
+          id:String(p.id||uid()), name:String(p.name).trim(),
+          entries:(Array.isArray(p.entries)?p.entries:[]).filter(function(e){return e&&Number(e.amount)>0;}).map(function(e){return {id:String(e.id||uid()),ts:Number(e.ts)||Date.now(),amount:Math.round(Number(e.amount)||0)};}),
+          settled:Array.isArray(p.settled)?p.settled:[], lastSettled:Number(p.lastSettled)||0
+        };
+      })
+    };
+  }
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast('ذخیره خودکار در دسترس نیست؛ فایل پشتیبان بگیرید.');}}
+  function toFa(s){return String(s).replace(/\d/g,function(d){return fa[d];});}
+  function fmt(n){return toFa(Math.round(Number(n)||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'٬'));}
+  function parseNum(s){
+    s=String(s||'').replace(/[۰-۹]/g,function(c){return String(fa.indexOf(c));}).replace(/[٠-٩]/g,function(c){return String('٠١٢٣٤٥٦٧٨٩'.indexOf(c));}).replace(/[^\d]/g,'');
+    return s?parseInt(s,10):0;
+  }
+  function dateStr(ts){try{return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{month:'long',day:'numeric',weekday:'long'}).format(new Date(ts));}catch(e){return new Date(ts).toLocaleDateString();}}
+  function shortDate(ts){try{return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{month:'numeric',day:'numeric'}).format(new Date(ts));}catch(e){return new Date(ts).toLocaleDateString();}}
+  function dayKey(ts){var d=new Date(ts);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate();}
+  function bal(p){return p.entries.reduce(function(a,e){return a+(Number(e.amount)||0);},0);}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function initials(n){var clean=String(n||'').trim();return clean?esc(Array.from(clean)[0]):'؟';}
+  function toast(m){var t=$('toast');t.textContent=m;t.className='on';clearTimeout(toastT);toastT=setTimeout(function(){t.className='';},2400);}
+
+  var onYes=null;
+  function ask(message,cb){$('mText').textContent=message;onYes=cb;$('modal').className='modal on';$('mYes').focus();}
+  function closeModal(){$('modal').className='modal';onYes=null;}
+  $('mNo').onclick=closeModal;
+  $('mYes').onclick=function(){var f=onYes;closeModal();if(f)f();};
+  $('modal').addEventListener('click',function(e){if(e.target===$('modal'))closeModal();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&$('modal').classList.contains('on'))closeModal();});
+
+  function renderSummary(){
+    var total=state.people.reduce(function(sum,p){return sum+bal(p);},0);
+    var today=dayKey(Date.now()),todayEntries=0;
+    state.people.forEach(function(p){p.entries.forEach(function(e){if(dayKey(e.ts)===today)todayEntries++;});});
+    $('grand').textContent=fmt(total);
+    $('peopleCount').textContent=toFa(state.people.length);
+    $('todayCount').textContent=toFa(todayEntries);
+    $('today').textContent=dateStr(Date.now());
+  }
+  function renderChips(){
+    var ch=$('chips');ch.innerHTML='';
+    state.people.forEach(function(p){
+      if(!(p.id in selected))selected[p.id]=true;
+      var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=p.name;b.setAttribute('aria-pressed',selected[p.id]?'true':'false');
+      b.onclick=function(){selected[p.id]=!selected[p.id];renderChips();};ch.appendChild(b);
+    });
+    $('noPeopleNote').hidden=state.people.length>0;
+    var count=state.people.filter(function(p){return !!selected[p.id];}).length;
+    $('selectedCount').textContent=toFa(count)+' نفر انتخاب شده';
+    $('selAll').textContent=(state.people.length&&count===state.people.length)?'لغو انتخاب همه':'انتخاب همه';
+    $('selAll').disabled=!state.people.length;
+  }
+  function renderPeople(){
+    var L=$('list');L.innerHTML='';
+    $('listCount').textContent=toFa(state.people.length)+' نفر';
+    if(!state.people.length){
+      L.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.8 20v-1.5A5.2 5.2 0 0 1 8 13.3h2a5.2 5.2 0 0 1 5.2 5.2V20M19 8v6M16 11h6"/></svg><strong>هنوز همکاری اضافه نشده</strong><span>از بخش پایین، نام اولین همکار را وارد کنید.</span></div>';
+      return;
+    }
+    state.people.forEach(function(p){
+      var balance=bal(p),d=document.createElement('article');d.className='person';
+      var h='<div class="p-head"><div class="person-identity"><div class="avatar" aria-hidden="true">'+initials(p.name)+'</div><div><div class="p-name">'+esc(p.name)+'</div><div class="p-sub">'+toFa(p.entries.length)+' ثبت هزینه'+(p.lastSettled?' · آخرین تسویه '+shortDate(p.lastSettled):'')+'</div></div></div>'+
+        '<div class="balance-wrap"><div class="p-bal'+(balance===0?' zero':'')+'">'+fmt(balance)+'<span class="balance-unit">تومان</span></div><span class="debt-status'+(balance===0?' is-zero':'')+'">'+(balance===0?'تسویه‌شده':'بدهکار')+'</span></div></div>'+
+        '<div class="p-actions"><button class="btn btn-soft" data-a="settle"'+(balance===0?' disabled':'')+'>تسویه حساب</button><button class="btn btn-quiet" data-a="hist">'+(open[p.id]?'بستن ریزحساب':'ریزحساب')+'</button><button class="btn btn-danger" data-a="del">حذف</button></div>';
+      if(open[p.id]){
+        h+='<div class="hist"><div class="hist-title">ریز هزینه‌ها</div>';
+        if(!p.entries.length)h+='<div class="p-sub" style="padding:8px 0">هزینه‌ای در حساب ثبت نشده است.</div>';
+        p.entries.slice().reverse().forEach(function(e){h+='<div class="hist-item"><span class="d">'+dateStr(e.ts)+'</span><span class="hist-amount">'+fmt(e.amount)+' تومان</span><button class="remove-entry" data-a="rm" data-id="'+esc(e.id)+'">پاک‌کردن</button></div>';});
+        h+='<div class="custom-entry"><input type="tel" inputmode="numeric" placeholder="مبلغ دلخواه (تومان)" data-custom="'+esc(p.id)+'" aria-label="مبلغ دلخواه برای '+esc(p.name)+'"><button class="btn btn-soft" data-a="custom">افزودن</button></div>';
+        if(p.settled&&p.settled.length)h+='<div class="settled">تسویه‌های قبلی: '+p.settled.slice(-5).reverse().map(function(s){return shortDate(s.ts)+' ('+fmt(s.amount)+' تومان)';}).join('، ')+'</div>';
+        h+='</div>';
+      }
+      d.innerHTML=h;
+      d.querySelectorAll('button[data-a]').forEach(function(btn){btn.onclick=function(){act(p,btn.getAttribute('data-a'),btn.getAttribute('data-id'),d);};});
+      d.querySelectorAll('[data-custom]').forEach(function(inp){
+        inp.addEventListener('input',function(){var v=parseNum(inp.value);inp.value=v?fmt(v):'';});
+        inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();act(p,'custom',null,d);}});
+      });
+      L.appendChild(d);
+    });
+  }
+  function render(){renderSummary();renderChips();renderPeople();}
+
+  function act(p,a,id,el){
+    if(a==='hist'){open[p.id]=!open[p.id];renderPeople();}
+    else if(a==='settle'){
+      var b=bal(p);if(!b)return;
+      ask('بدهی '+p.name+' به مبلغ '+fmt(b)+' تومان تسویه و حساب او صفر شود؟',function(){
+        p.settled=p.settled||[];p.settled.push({ts:Date.now(),amount:b});p.lastSettled=Date.now();p.entries=[];save();render();toast('حساب '+p.name+' تسویه شد.');
+      });
+    }else if(a==='del'){
+      ask('همکار «'+p.name+'» و تمام سوابق حسابش حذف شود؟'+(bal(p)?' بدهی ثبت‌شده: '+fmt(bal(p))+' تومان.':''),function(){
+        state.people=state.people.filter(function(x){return x.id!==p.id;});delete selected[p.id];delete open[p.id];save();render();toast('همکار حذف شد.');
+      });
+    }else if(a==='rm'){
+      var entry=p.entries.find(function(e){return e.id===id;});if(!entry)return;
+      ask('این ردیف هزینه به مبلغ '+fmt(entry.amount)+' تومان حذف شود؟',function(){p.entries=p.entries.filter(function(e){return e.id!==id;});save();render();toast('ردیف هزینه حذف شد.');});
+    }else if(a==='custom'){
+      var inp=el.querySelector('[data-custom]'),v=parseNum(inp&&inp.value);
+      if(!v){toast('مبلغ را وارد کنید.');if(inp)inp.focus();return;}
+      p.entries.push({id:uid(),ts:Date.now(),amount:v});save();render();open[p.id]=true;renderPeople();toast('هزینه به حساب '+p.name+' اضافه شد.');
+    }
+  }
+
+  $('amount').addEventListener('input',function(){var v=parseNum(this.value);this.value=v?fmt(v):'';});
+  $('amount').addEventListener('keydown',function(e){if(e.key==='Enter')$('addDay').click();});
+  $('selAll').onclick=function(){var all=state.people.length&&state.people.every(function(p){return !!selected[p.id];});state.people.forEach(function(p){selected[p.id]=!all;});renderChips();};
+  $('addDay').onclick=function(){
+    var v=parseNum($('amount').value);if(!v){toast('مبلغ نان را وارد کنید.');$('amount').focus();return;}
+    var ps=state.people.filter(function(p){return selected[p.id];});if(!ps.length){toast('حداقل یک همکار را انتخاب کنید.');return;}
+    var ts=Date.now();ps.forEach(function(p){p.entries.push({id:uid(),ts:ts,amount:v});});state.last=v;save();render();toast(fmt(v)+' تومان برای '+toFa(ps.length)+' نفر ثبت شد.');
+  };
+  function addPerson(){
+    var n=$('newName').value.trim();if(!n){toast('نام همکار را وارد کنید.');$('newName').focus();return;}
+    if(state.people.some(function(p){return p.name.toLocaleLowerCase()===n.toLocaleLowerCase();})){toast('این نام از قبل در فهرست است.');return;}
+    var p={id:uid(),name:n,entries:[],settled:[]};state.people.push(p);selected[p.id]=true;$('newName').value='';save();render();toast(n+' به فهرست اضافه شد.');
+  }
+  $('addPerson').onclick=addPerson;
+  $('newName').addEventListener('keydown',function(e){if(e.key==='Enter')addPerson();});
+
+  function restore(txt){
+    try{var s=JSON.parse(txt);if(!s||!Array.isArray(s.people))throw new Error('bad backup');var safe=normalizeState(s);
+      ask('اطلاعات فعلی با اطلاعات فایل پشتیبان جایگزین شود؟',function(){state=safe;selected={};open={};save();render();toast('اطلاعات بازیابی شد.');});
+    }catch(e){toast('فایل یا متن پشتیبان معتبر نیست.');}
+  }
+  $('exp').onclick=function(){
+    var t=JSON.stringify(state);$('box').value=t;
+    try{var blob=new Blob([t],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='nan-hesab-backup.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);toast('فایل پشتیبان آماده شد.');}
+    catch(e){$('box').focus();$('box').select();toast('متن پشتیبان را کپی کنید.');}
+  };
+  $('imp').onclick=function(){$('file').click();};
+  $('file').onchange=function(){var f=this.files&&this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){restore(r.result);};r.onerror=function(){toast('خواندن فایل ناموفق بود.');};r.readAsText(f);this.value='';};
+  $('impTxt').onclick=function(){restore($('box').value);};
+
+  var storageOK=false;try{localStorage.setItem('__nan_test__','1');storageOK=localStorage.getItem('__nan_test__')==='1';localStorage.removeItem('__nan_test__');}catch(e){}
+  $('stat').textContent=storageOK?'ذخیره‌سازی خودکار روی این مرورگر فعال است.':'ذخیره خودکار در این مرورگر در دسترس نیست؛ بعد از تغییرات فایل پشتیبان بگیرید.';
+  load();if(state.last)$('amount').value=fmt(state.last);render();
+  if(!storageOK)toast('ذخیره خودکار فعال نیست؛ فایل پشتیبان بگیرید.');
+})();
+</script>
+<script>if ("serviceWorker" in navigator) { window.addEventListener("load", function () { navigator.serviceWorker.register("./sw.js").catch(function (err) { console.warn("Service worker registration failed:", err); }); }); }</script>
+</body>
+</html>
